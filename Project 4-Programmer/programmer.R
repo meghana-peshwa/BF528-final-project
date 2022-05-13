@@ -104,7 +104,14 @@ scrna <- FindClusters(scrna, resolution = 0.5)
 #make bar chart or pie chart
 clusters <- as.data.frame(table(Idents(scrna)))
 
+clusters$proportion <- clusters$Freq / sum(clusters$Freq) * 100 
+
 ggplot(data=clusters, aes(x=Var1, y=Freq)) +
   geom_bar(stat="identity", fill="steelblue")+
   theme_minimal()+
   labs(title="Bar chart for number of cells in each cluster",x="Cluster",y='Frequency')
+
+ggplot(data=clusters, aes(x=Var1, y=proportion)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  theme_minimal()+
+  labs(title="Bar chart for relative proportion of cell numbers in each cluster",x="Cluster",y='Percentage')
