@@ -1,0 +1,27 @@
+#!/bin/bash -l
+
+#$ -P bf528
+#$ -l h_rt=12:00:00
+#$ -cwd
+#$ -j y
+#$ -pe omp 4
+#$ -N read_counts
+#$ -o read_counts.qlog
+#$ -m b
+#$ -m e
+
+echo "Running job $JOB_NAME"
+echo "Started: $(date)"
+echo "Running in directory: $(pwd)"
+
+data1=/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879604/SRR3879604_1_bc.fastq.gz
+data2=/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879605/SRR3879605_1_bc.fastq.gz
+data3=/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879606/SRR3879606_1_bc.fastq.gz
+
+zcat $data1 | grep "bc1=" | awk '{print $2,$3}' | awk -F '=| |=' '{print $2$4}' | sort | uniq -c > SRR3879604_counts
+zcat $data2 | grep "bc1=" | awk '{print $2,$3}' | awk -F '=| |=' '{print $2$4}' | sort | uniq -c > SRR3879605_counts
+zcat $data3 | grep "bc1=" | awk '{print $2,$3}' | awk -F '=| |=' '{print $2$4}' | sort | uniq -c > SRR3879606_counts
+
+zcat $data1 $data2 $data3 | grep "bc1=" | awk '{print $2,$3}' | awk -F '=| |=' '{print $2$4}' | sort | uniq -c > combined_counts
+
+echo "Finished on: $(date)"

@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+#$ -P bf528
+#$ -l h_rt=12:00:00
+#$ -cwd
+#$ -j y
+#$ -pe omp 4
+#$ -N create_map
+#$ -o create_map.qlog
+#$ -m b
+#$ -m e
+
+echo "Running job $JOB_NAME"
+echo "Started: $(date)"
+echo "Running in directory: $(pwd)"
+
+zcat gencode.v40.transcripts.fa.gz | grep ">" | awk -F "|" '{print $1"\t"$2}' | cut -c2- > map_file.tsv
+
+
+echo "Finished on: $(date)" 

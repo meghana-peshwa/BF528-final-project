@@ -1,0 +1,21 @@
+#!/bin/bash -l
+
+#$ -P bf528
+#$ -l h_rt=12:00:00
+#$ -cwd
+#$ -j y
+#$ -pe omp 4
+#$ -N create_index
+#$ -o create_index.qlog
+#$ -m b
+#$ -m e
+
+echo "Running job $JOB_NAME"
+echo "Started: $(date)"
+echo "Running in directory: $(pwd)"
+
+module load salmon
+
+salmon index -i gencode.v40.index -k 31 --gencode -p 10 -t gencode.v40.transcripts.fa.gz
+
+echo "Finished on: $(date)" 

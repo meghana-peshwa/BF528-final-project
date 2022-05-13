@@ -1,0 +1,33 @@
+#!/bin/bash -l
+
+#$ -P bf528
+#$ -l h_rt=12:00:00
+#$ -cwd
+#$ -j y
+#$ -pe omp 16
+#$ -N salmon
+#$ -o salmon.qlog
+#$ -m b
+#$ -m e
+
+echo "Running job $JOB_NAME"
+echo "Started: $(date)"
+echo "Running in directory: $(pwd)"
+
+module load salmon
+
+files_path = /projectnb/bf528/project_4_scrnaseq/fastq
+
+salmon alevin -l ISR -1 /projectnb/bf528/project_4_scrnaseq/fastq/SRR3879604/SRR3879604_1_bc.fastq.gz \
+/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879605/SRR3879605_1_bc.fastq.gz \
+/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879606/SRR3879606_1_bc.fastq.gz \
+-2 /projectnb/bf528/project_4_scrnaseq/fastq/SRR3879604/SRR3879604_2.fastq.gz \
+/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879605/SRR3879605_2.fastq.gz \
+/projectnb/bf528/project_4_scrnaseq/fastq/SRR3879606/SRR3879606_2.fastq.gz \
+-i gencode.v40.index -p 10 -o alevin_output --tgMap map_file.tsv \
+--whitelist whitelist.txt \
+--end 5 --barcodeLength 19 --umiLength 6 --dumpMtx
+
+echo "Finished on: $(date)" 
+
+
